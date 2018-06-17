@@ -1,0 +1,100 @@
+close all
+clc
+y3=imread('C:\Users\Administrator\Desktop\医学图像处理\实验6\图片\FigP0936 .tif');
+ 
+% y=im2bw(y3); 
+figure(1)
+y=y3(:,:,2);%y是待处理的图像
+imshow(y,[])
+title('原图')
+ 
+L=bwlabel(y); 
+new1=y;
+L1=bwlabel(new1); 
+% L=uint8(L);
+for k=1:770
+    if(L(k,1)~=0)
+        [r,c]=find(L1==L(k,1))
+        for i=1:length(r)
+            new1(r(i),c(i))=0;
+        end
+    end  
+end  
+ 
+for k=1:770
+    if(L(k,440)~=0)  
+        [r,c]=find(L1==L(k,440))
+        for i=1:length(r)
+           new1(r(i),c(i))=0;
+        end
+    end  
+end  
+ 
+for k=1:440
+    if(L(1,k)~=0)  
+             [r,c]=find(L1==L(1,k))
+        for i=1:length(r)
+           new1(r(i),c(i))=0;
+        end
+    end  
+end  
+ 
+for k=1:440
+    if(L(770,k)~=0)    
+        [r,c]=find(L1==L(770,k))
+        for i=1:length(r)
+           new1(r(i),c(i))=0;
+        end
+    end  
+end  
+figure(2)
+new4=y-new1;
+onlyborder=new4;
+imshow(new4,[])
+title('仅与图像边界融合在一起的颗粒')
+ 
+figure(10)
+imshow(new1,[])
+title('非边界颗粒')
+ 
+ 
+new4=new1;
+[L,n]=bwlabel(new4); 
+ 
+for k=1:119
+    [r,c]=find(L==k)
+    if(length(r)<400)  
+%         400 is a approciate choice
+        for i=1:length(r)
+            new4(r(i),c(i))=0;
+        end
+    end   
+end  
+figure(4)
+imshow(new1-new4,[]);
+title('没有重叠的颗粒')
+noeach=new1-new4;
+ 
+figure(5)
+imshow(new4,[]);
+onlyeach=new4;
+title('仅彼此重叠的颗粒')
+% onlyeach=new2;
+% noeach=new1-new2;
+% onlyborder=new2;
+figure(6)
+subplot 141
+imshow(y,[])
+title('原图')
+ 
+subplot 142
+imshow(onlyborder,[])
+title('仅与图像边界融合在一起的颗粒')
+ 
+subplot 143
+imshow(noeach,[])
+title('没有重叠的颗粒')
+ 
+subplot 144
+imshow(onlyeach,[])
+title('仅彼此重叠的颗粒')
